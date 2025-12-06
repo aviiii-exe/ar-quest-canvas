@@ -57,6 +57,24 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        xp: {
+          DEFAULT: "hsl(var(--xp))",
+          foreground: "hsl(var(--xp-foreground))",
+        },
+        rarity: {
+          legendary: "hsl(var(--legendary))",
+          epic: "hsl(var(--epic))",
+          rare: "hsl(var(--rare))",
+          common: "hsl(var(--common))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
