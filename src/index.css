@@ -1,6 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,39 +16,39 @@
 @layer base {
   :root {
     /* Core palette - warm earthy tones inspired by Hampi's stone architecture */
-    --background: 210 50% 93%;
-    --foreground: 210 50% 20%;
+    --background: 0 0% 96%;
+    --foreground: 0 0% 9%;
 
-    --card: 210 50% 90%;
-    --card-foreground: 210 50% 20%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 9%;
 
-    --popover: 210 50% 93%;
-    --popover-foreground: 210 50% 20%;
+    --popover: 0 0% 89%;
+    --popover-foreground: 0 0% 9%;
 
     /* Primary - Terracotta/burnt orange */
-    --primary: 210 50% 12%;
-    --primary-foreground: 210 50% 93%;
+    --primary: 20 90% 48%;
+    --primary-foreground: 33 100% 96%;
 
     /* Secondary - Sandy beige */
-    --secondary: 240 47% 91%;
-    --secondary-foreground: 210 50% 20%;
+    --secondary: 0 0% 32%;
+    --secondary-foreground: 0 0% 98%;
 
     /* Muted - Soft parchment */
-    --muted: 240 37% 91%;
-    --muted-foreground: 210 10% 37%;
+    --muted: 0 0% 63%;
+    --muted-foreground: 0 0% 9%;
 
     /* Accent - Golden amber */
-    --accent: 270 80% 91%;
-    --accent-foreground: 270 80% 20%;
+    --accent: 47 100% 96%;
+    --accent-foreground: 37 92% 50%;
 
-    --destructive: 0 76% 90%;
-    --destructive-foreground: 0 63% 31%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 85% 97%;
 
-    --border: 240 27% 91%;
-    --input: 240 27% 91%;
-    --ring: 210 50% 12%;
+    --border: 0 0% 83%;
+    --input: 0 0% 83%;
+    --ring: 20 90% 48%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
     /* Adventure theme extras */
     --success: 142 70% 40%;
@@ -60,22 +63,22 @@
     --common: 35 25% 55%;
 
     --sidebar-background: 210 50% 93%;
-    --sidebar-foreground: 210 50% 25%;
-    --sidebar-primary: 210 50% 12%;
-    --sidebar-primary-foreground: 210 50% 93%;
-    --sidebar-accent: 240 47% 91%;
-    --sidebar-accent-foreground: 210 50% 20%;
-    --sidebar-border: 240 27% 91%;
-    --sidebar-ring: 240 17% 75%;
-    --chart-1: 210 58% 39%;
-    --chart-2: 240 76% 61%;
-    --chart-3: 270 37% 24%;
-    --chart-4: 300 74% 66%;
-    --chart-5: 330 87% 67%;
-    --sidebar: 248 0.3% 98.4%;
-    --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --sidebar-foreground: 0 0% 9%;
+    --sidebar-primary: 20 90% 48%;
+    --sidebar-primary-foreground: 33 100% 96%;
+    --sidebar-accent: 0 0% 32%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 83%;
+    --sidebar-ring: 20 90% 48%;
+    --chart-1: 27 95% 60%;
+    --chart-2: 43 96% 56%;
+    --chart-3: 47 95% 53%;
+    --chart-4: 24 94% 53%;
+    --chart-5: 0 0% 45%;
+    --sidebar: 0 0% 98%;
+    --font-sans: 'Roboto', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    --font-serif: 'Libre Caslon Text', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
     --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
     --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
     --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
@@ -89,33 +92,33 @@
   }
 
   .dark {
-    --background: 210 1% 12%;
-    --foreground: 210 30% 70%;
+    --background: 0 0% 9%;
+    --foreground: 0 0% 98%;
 
-    --card: 210 1% 9%;
-    --card-foreground: 210 30% 70%;
+    --card: 0 0% 14%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 210 1% 12%;
-    --popover-foreground: 210 30% 70%;
+    --popover: 0 0% 25%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 210 30% 85%;
-    --primary-foreground: 210 1% 12%;
+    --primary: 27 95% 60%;
+    --primary-foreground: 12 81% 14%;
 
-    --secondary: 240 17% 16%;
-    --secondary-foreground: 210 30% 70%;
+    --secondary: 0 0% 45%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 240 12% 16%;
-    --muted-foreground: 240 17% 75%;
+    --muted: 0 0% 45%;
+    --muted-foreground: 0 0% 98%;
 
-    --accent: 270 40% 21%;
-    --accent-foreground: 270 80% 70%;
+    --accent: 20 91% 14%;
+    --accent-foreground: 43 96% 56%;
 
-    --destructive: 0 33% 20%;
-    --destructive-foreground: 0 91% 71%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 85% 97%;
 
-    --border: 240 12% 16%;
-    --input: 240 7% 25%;
-    --ring: 240 17% 83%;
+    --border: 0 0% 32%;
+    --input: 0 0% 32%;
+    --ring: 27 95% 60%;
 
     --success: 142 60% 45%;
     --success-foreground: 25 25% 8%;
@@ -129,19 +132,19 @@
     --common: 35 25% 50%;
 
     --sidebar-background: 210 1% 12%;
-    --sidebar-foreground: 240 47% 95%;
-    --sidebar-primary: 270 80% 55%;
-    --sidebar-primary-foreground: 210 30% 70%;
-    --sidebar-accent: 240 12% 16%;
-    --sidebar-accent-foreground: 240 47% 95%;
-    --sidebar-border: 240 12% 16%;
-    --sidebar-ring: 240 17% 83%;
-    --chart-1: 210 70% 50%;
-    --chart-2: 330 75% 55%;
-    --chart-3: 240 80% 55%;
-    --chart-4: 130 65% 60%;
-    --chart-5: 10 60% 45%;
-    --sidebar: 266 4% 20.8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 27 95% 60%;
+    --sidebar-primary-foreground: 12 81% 14%;
+    --sidebar-accent: 43 96% 56%;
+    --sidebar-accent-foreground: 20 91% 14%;
+    --sidebar-border: 0 0% 32%;
+    --sidebar-ring: 27 95% 60%;
+    --chart-1: 30 97% 72%;
+    --chart-2: 45 96% 64%;
+    --chart-3: 48 96% 76%;
+    --chart-4: 27 95% 60%;
+    --chart-5: 0 0% 45%;
+    --sidebar: 0 0% 14%;
     --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
     --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
     --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
