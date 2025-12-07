@@ -1,12 +1,13 @@
-import { Map, Compass, BookOpen, Trophy } from 'lucide-react';
+import { Map, Compass, BookOpen, Trophy, Users } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { icon: Compass, label: 'Explore', path: '/' },
+  { icon: Map, label: 'Map', path: '/map' },
   { icon: BookOpen, label: 'Passport', path: '/passport' },
   { icon: Trophy, label: 'Achievements', path: '/achievements' },
-  { icon: Map, label: 'Leaderboard', path: '/leaderboard' },
+  { icon: Users, label: 'Leaderboard', path: '/leaderboard' },
 ];
 
 export function TabNav() {

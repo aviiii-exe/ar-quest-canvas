@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import Passport from "./pages/Passport";
 import Achievements from "./pages/Achievements";
 import Leaderboard from "./pages/Leaderboard";
+import Map from "./pages/Map";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/passport" element={<Passport />} />
             <Route path="/achievements" element={<Achievements />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/map" element={<Map />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
