@@ -17,7 +17,7 @@ const ProximityCheckIn: React.FC<ProximityCheckInProps> = ({
   site,
   onCheckIn,
   isVisited,
-  checkInRadiusMeters = 100 // Default 100 meters
+  checkInRadiusMeters = 200 // Default 200 meters
 }) => {
   const { 
     latitude, 
@@ -26,7 +26,6 @@ const ProximityCheckIn: React.FC<ProximityCheckInProps> = ({
     error, 
     getCurrentPosition,
     getDistanceFromLatLonInMeters,
-    isWithinRadius 
   } = useGeolocation({ watch: true });
 
   const [distance, setDistance] = useState<number | null>(null);
