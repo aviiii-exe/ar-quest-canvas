@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { AppLayout } from '@/components/layout/AppLayout';
+import { FloatingNav } from '@/components/layout/FloatingNav';
 import HeritageMap from '@/components/map/HeritageMap';
-import { useHeritageSites, usePassportStamps, useCollectStamp } from '@/hooks/useHeritageSites';
+import { useHeritageSites, usePassportStamps } from '@/hooks/useHeritageSites';
 import { useAuth } from '@/hooks/useAuth';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -9,11 +9,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tables } from '@/integrations/supabase/types';
-import { MapPin, Clock, Star, Navigation, X } from 'lucide-react';
+import { MapPin, Clock, Star, X } from 'lucide-react';
 import QRScanner from '@/components/checkin/QRScanner';
 import ProximityCheckIn from '@/components/checkin/ProximityCheckIn';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+
+const PROXIMITY_RADIUS_METERS = 200;
 
 const Map = () => {
   const { user } = useAuth();
@@ -21,7 +23,6 @@ const Map = () => {
   const { data: stamps, refetch: refetchStamps } = usePassportStamps();
   const { latitude, longitude } = useGeolocation({ watch: true });
   const { toast } = useToast();
-  const collectStamp = useCollectStamp();
   
   const [selectedSite, setSelectedSite] = useState<Tables<'heritage_sites'> | null>(null);
 
@@ -113,60 +114,50 @@ const Map = () => {
 
   if (sitesLoading) {
     return (
-      <AppLayout>
-        <div className="space-y-4">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-[400px] w-full rounded-xl" />
+      <div className="min-h-screen bg-background">
+        <FloatingNav />
+        <div className="h-screen flex items-center justify-center">
+          <Skeleton className="h-full w-full" />
         </div>
-      </AppLayout>
+      </div>
     );
   }
 
   return (
-    <AppLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold">Heritage Sites Map</h1>
-            <p className="text-muted-foreground">
-              Explore Hampi's UNESCO World Heritage Sites
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <QRScanner onScan={handleQRScan} />
-          </div>
-        </div>
+    <div className="h-screen w-full relative overflow-hidden">
+      {/* Floating Navigation */}
+      <FloatingNav />
 
-        {/* Stats */}
-        <div className="flex gap-4 flex-wrap">
-          <Badge variant="secondary" className="text-sm py-1 px-3">
-            <MapPin className="h-3 w-3 mr-1" />
-            {sites?.length || 0} Sites
-          </Badge>
-          <Badge variant="secondary" className="text-sm py-1 px-3">
-            <Star className="h-3 w-3 mr-1" />
-            {visitedSiteIds.length} Visited
-          </Badge>
-          {userLocation && (
-            <Badge variant="outline" className="text-sm py-1 px-3">
-              <Navigation className="h-3 w-3 mr-1" />
-              Location Active
-            </Badge>
-          )}
-        </div>
+      {/* Full Screen Map */}
+      <HeritageMap
+        sites={sites || []}
+        visitedSiteIds={visitedSiteIds}
+        onSiteClick={handleSiteClick}
+        userLocation={userLocation}
+        fullScreen={true}
+      />
 
-        {/* Map */}
-        <HeritageMap
-          sites={sites || []}
-          visitedSiteIds={visitedSiteIds}
-          onSiteClick={handleSiteClick}
-          userLocation={userLocation}
-        />
+      {/* QR Scanner - Bottom Right */}
+      <div className="absolute bottom-6 right-6 z-40">
+        <QRScanner onScan={handleQRScan} />
+      </div>
 
-        {/* Selected Site Details */}
-        {selectedSite && (
-          <Card>
+      {/* Stats Badge - Top Left below nav */}
+      <div className="absolute top-20 left-4 z-40 flex flex-col gap-2">
+        <Badge variant="secondary" className="text-sm py-1 px-3 bg-background/90 backdrop-blur-sm shadow-md">
+          <MapPin className="h-3 w-3 mr-1" />
+          {sites?.length || 0} Sites
+        </Badge>
+        <Badge variant="secondary" className="text-sm py-1 px-3 bg-background/90 backdrop-blur-sm shadow-md">
+          <Star className="h-3 w-3 mr-1" />
+          {visitedSiteIds.length} Visited
+        </Badge>
+      </div>
+
+      {/* Selected Site Panel - Bottom Sheet Style */}
+      {selectedSite && (
+        <div className="absolute bottom-0 left-0 right-0 z-40 p-4 animate-in slide-in-from-bottom">
+          <Card className="max-w-md mx-auto shadow-2xl">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div>
@@ -211,17 +202,18 @@ const Map = () => {
                 )}
               </div>
 
-              {/* Proximity Check-in */}
+              {/* Proximity Check-in with 200m radius */}
               <ProximityCheckIn
                 site={selectedSite}
                 onCheckIn={handleProximityCheckIn}
                 isVisited={visitedSiteIds.includes(selectedSite.id)}
+                checkInRadiusMeters={PROXIMITY_RADIUS_METERS}
               />
             </CardContent>
           </Card>
-        )}
-      </div>
-    </AppLayout>
+        </div>
+      )}
+    </div>
   );
 };
 

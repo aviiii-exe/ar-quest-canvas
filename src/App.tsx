@@ -6,9 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
-import Passport from "./pages/Passport";
-import Achievements from "./pages/Achievements";
-import Leaderboard from "./pages/Leaderboard";
+import Profile from "./pages/Profile";
 import Map from "./pages/Map";
 import NotFound from "./pages/NotFound";
 
@@ -24,9 +22,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/passport" element={<Passport />} />
-            <Route path="/achievements" element={<Achievements />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/map" element={<Map />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
