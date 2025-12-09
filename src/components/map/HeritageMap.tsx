@@ -57,7 +57,7 @@ const HeritageMap: React.FC<HeritageMapProps> = ({
       style: MAP_STYLES[mapStyle],
       center: HAMPI_CENTER,
       zoom: 14,
-      pitch: fullScreen ? 45 : 30,
+      pitch: 0,
     });
 
     map.current.addControl(
@@ -225,7 +225,7 @@ const HeritageMap: React.FC<HeritageMapProps> = ({
           className="shadow-lg bg-background/90 backdrop-blur-sm"
           title="Go to my location"
         >
-          <Navigation className={cn("h-4 w-4", isLocating && "animate-spin")} />
+          <Navigation className={cn("h-4 w-4 text-foreground", isLocating && "animate-spin")} />
         </Button>
         <Button
           size="icon"
@@ -234,7 +234,7 @@ const HeritageMap: React.FC<HeritageMapProps> = ({
           className="shadow-lg bg-background/90 backdrop-blur-sm"
           title="Center on Hampi"
         >
-          <MapPin className="h-4 w-4" />
+          <MapPin className="h-4 w-4 text-foreground" />
         </Button>
         <Button
           size="icon"
@@ -243,7 +243,7 @@ const HeritageMap: React.FC<HeritageMapProps> = ({
           className="shadow-lg bg-background/90 backdrop-blur-sm"
           title="Toggle map style"
         >
-          <Layers className="h-4 w-4" />
+          <Layers className="h-4 w-4 text-foreground" />
         </Button>
       </div>
 
