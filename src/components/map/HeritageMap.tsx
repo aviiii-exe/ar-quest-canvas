@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
 import { Tables } from '@/integrations/supabase/types';
 import { MapPin, Navigation, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
+// Import MapLibre CSS via CDN to ensure proper loading
+const MAPLIBRE_CSS = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css';
 
 interface HeritageMapProps {
   sites: Tables<'heritage_sites'>[];
@@ -36,6 +38,17 @@ const HeritageMap: React.FC<HeritageMapProps> = ({
     satellite: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
   };
 
+  // Load MapLibre CSS dynamically
+  useEffect(() => {
+    const existingLink = document.querySelector(`link[href="${MAPLIBRE_CSS}"]`);
+    if (!existingLink) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = MAPLIBRE_CSS;
+      document.head.appendChild(link);
+    }
+  }, []);
+
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
@@ -61,15 +74,6 @@ const HeritageMap: React.FC<HeritageMapProps> = ({
       }),
       'bottom-left'
     );
-
-    // Add geolocate control
-    const geolocate = new maplibregl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true
-      },
-      trackUserLocation: true
-    });
-    map.current.addControl(geolocate, 'top-right');
 
     return () => {
       markersRef.current.forEach(marker => marker.remove());
