@@ -1,17 +1,16 @@
-import { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { FloatingNav } from '@/components/layout/FloatingNav';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { HampiGuideChat } from "@/components/guide/HampiGuideChat";
 import { MapPin, Trophy, Compass, Sparkles, ArrowRight, Map, Camera, Star, Stamp, MessageCircle } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
 
-  // If user is authenticated, show the Guide/Chatbot placeholder
+  // If user is authenticated, show the Guide/Chatbot
   if (user) {
     return (
       <div className="min-h-screen bg-background">
@@ -30,52 +29,8 @@ const Index = () => {
               </p>
             </div>
 
-            {/* Placeholder Chat Interface */}
-            <Card className="min-h-[400px] flex flex-col">
-              <CardContent className="flex-1 flex flex-col items-center justify-center py-12 text-center">
-                <div className="space-y-4">
-                  <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-muted mb-4">
-                    <Sparkles className="h-10 w-10 text-muted-foreground" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Coming Soon!</h3>
-                  <p className="text-muted-foreground max-w-sm">
-                    The AI Guide will help you plan your Hampi adventure, suggest itineraries, 
-                    and answer questions about heritage sites.
-                  </p>
-                  
-                  {/* Quick action suggestions */}
-                  <div className="flex flex-wrap gap-2 justify-center mt-6">
-                    <Button variant="outline" size="sm" disabled className="gap-2">
-                      <Map className="h-4 w-4" />
-                      Plan my trip
-                    </Button>
-                    <Button variant="outline" size="sm" disabled className="gap-2">
-                      <Star className="h-4 w-4" />
-                      Top sites
-                    </Button>
-                    <Button variant="outline" size="sm" disabled className="gap-2">
-                      <Compass className="h-4 w-4" />
-                      Nearby sites
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-              
-              {/* Disabled input area */}
-              <div className="border-t p-4">
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    placeholder="Ask about Hampi heritage sites..." 
-                    disabled
-                    className="flex-1 px-4 py-2 rounded-full bg-muted text-muted-foreground cursor-not-allowed"
-                  />
-                  <Button disabled className="rounded-full">
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </Card>
+            {/* Chatbot Interface */}
+            <HampiGuideChat />
 
             {/* Quick Links */}
             <div className="grid grid-cols-2 gap-4">
