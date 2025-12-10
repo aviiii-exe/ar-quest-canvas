@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface Message {
   role: "user" | "assistant";
@@ -11,6 +12,7 @@ export function useHampiGuide() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const sendMessage = useCallback(async (userMessage: string) => {
     if (!userMessage.trim()) return;
@@ -20,8 +22,16 @@ export function useHampiGuide() {
     setIsLoading(true);
 
     try {
+      // Get auth token for context-aware responses
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+
       const { data, error } = await supabase.functions.invoke("hampi-guide", {
-        body: { messages: [...messages, userMsg] },
+        body: { 
+          messages: [...messages, userMsg],
+          includeContext: !!user // Include site context if user is logged in
+        },
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
 
       if (error) {
@@ -46,7 +56,7 @@ export function useHampiGuide() {
     } finally {
       setIsLoading(false);
     }
-  }, [messages, toast]);
+  }, [messages, toast, user]);
 
   const clearChat = useCallback(() => {
     setMessages([]);

@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useHampiGuide, Message } from "@/hooks/useHampiGuide";
+import { MarkdownContent } from "./MarkdownContent";
+import { useAuth } from "@/hooks/useAuth";
 import { 
   ArrowRight, 
   Sparkles, 
@@ -11,47 +13,54 @@ import {
   Compass, 
   RotateCcw,
   Loader2,
-  MessageCircle
+  MessageCircle,
+  Calendar,
+  Route
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const QUICK_PROMPTS = [
-  { icon: Map, label: "Plan my trip", prompt: "Help me plan a 2-day trip to Hampi. What are the must-see sites?" },
-  { icon: Star, label: "Top sites", prompt: "What are the top 5 heritage sites I absolutely must visit in Hampi?" },
-  { icon: Compass, label: "Nearby sites", prompt: "I'm near Virupaksha Temple. What other sites are within walking distance?" },
+  { icon: Calendar, label: "2-Day Itinerary", prompt: "Create a detailed 2-day itinerary for exploring Hampi. Include morning, afternoon, and evening activities with time estimates." },
+  { icon: Star, label: "Top 5 Sites", prompt: "What are the top 5 heritage sites I absolutely must visit in Hampi? Tell me what makes each special." },
+  { icon: Route, label: "Walking Route", prompt: "Suggest the best walking route to cover the main temples in one day, starting from Virupaksha Temple." },
+  { icon: Compass, label: "Hidden Gems", prompt: "What are some lesser-known hidden gems in Hampi that most tourists miss?" },
 ];
 
-function ChatMessage({ message }: { message: Message }) {
+function ChatMessage({ message, isUser }: { message: Message; isUser: boolean }) {
   return (
     <div
       className={cn(
         "flex gap-3 mb-4",
-        message.role === "user" ? "flex-row-reverse" : "flex-row"
+        isUser ? "flex-row-reverse" : "flex-row"
       )}
     >
       <div
         className={cn(
           "flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center",
-          message.role === "user" 
+          isUser 
             ? "bg-primary text-primary-foreground" 
             : "bg-muted"
         )}
       >
-        {message.role === "user" ? (
-          <span className="text-sm font-medium">You</span>
+        {isUser ? (
+          <span className="text-xs font-medium">You</span>
         ) : (
           <Sparkles className="h-4 w-4" />
         )}
       </div>
       <div
         className={cn(
-          "max-w-[80%] rounded-2xl px-4 py-2.5",
-          message.role === "user"
+          "max-w-[85%] rounded-2xl px-4 py-2.5",
+          isUser
             ? "bg-primary text-primary-foreground rounded-tr-sm"
             : "bg-muted rounded-tl-sm"
         )}
       >
-        <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+        {isUser ? (
+          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+        ) : (
+          <MarkdownContent content={message.content} />
+        )}
       </div>
     </div>
   );
@@ -59,6 +68,7 @@ function ChatMessage({ message }: { message: Message }) {
 
 export function HampiGuideChat() {
   const { messages, isLoading, sendMessage, clearChat } = useHampiGuide();
+  const { user } = useAuth();
   const [input, setInput] = useState("");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -88,12 +98,19 @@ export function HampiGuideChat() {
   };
 
   return (
-    <Card className="min-h-[400px] flex flex-col">
+    <Card className="min-h-[450px] flex flex-col">
       {/* Chat Header */}
       <div className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center gap-2">
           <MessageCircle className="h-5 w-5 text-primary" />
-          <span className="font-medium">Hampi Guide</span>
+          <div>
+            <span className="font-medium">Hampi Guide</span>
+            {user && (
+              <span className="text-xs text-muted-foreground ml-2">
+                • Personalized
+              </span>
+            )}
+          </div>
         </div>
         {messages.length > 0 && (
           <Button 
@@ -117,13 +134,21 @@ export function HampiGuideChat() {
               <Sparkles className="h-8 w-8 text-primary" />
             </div>
             <h3 className="text-lg font-semibold mb-2">Welcome to Hampi Guide!</h3>
-            <p className="text-muted-foreground text-sm max-w-sm mb-6">
-              I'm your AI travel companion. Ask me anything about Hampi's heritage sites, 
-              history, or help planning your visit.
+            <p className="text-muted-foreground text-sm max-w-sm mb-2">
+              I'm your AI travel companion for Hampi.
+              {user ? (
+                <span className="block mt-1 text-primary">
+                  ✨ I know which sites you've visited and can give personalized recommendations!
+                </span>
+              ) : (
+                <span className="block mt-1">
+                  Sign in for personalized recommendations based on your visits.
+                </span>
+              )}
             </p>
             
             {/* Quick action suggestions */}
-            <div className="flex flex-wrap gap-2 justify-center">
+            <div className="grid grid-cols-2 gap-2 w-full max-w-sm mt-4">
               {QUICK_PROMPTS.map((item) => (
                 <Button 
                   key={item.label}
@@ -131,10 +156,10 @@ export function HampiGuideChat() {
                   size="sm" 
                   onClick={() => handleQuickPrompt(item.prompt)}
                   disabled={isLoading}
-                  className="gap-2"
+                  className="gap-2 h-auto py-2 px-3 text-left justify-start"
                 >
-                  <item.icon className="h-4 w-4" />
-                  {item.label}
+                  <item.icon className="h-4 w-4 flex-shrink-0" />
+                  <span className="text-xs">{item.label}</span>
                 </Button>
               ))}
             </div>
@@ -143,7 +168,7 @@ export function HampiGuideChat() {
           // Messages list
           <ScrollArea ref={scrollAreaRef} className="flex-1 p-4">
             {messages.map((msg, idx) => (
-              <ChatMessage key={idx} message={msg} />
+              <ChatMessage key={idx} message={msg} isUser={msg.role === "user"} />
             ))}
             {isLoading && (
               <div className="flex gap-3 mb-4">
@@ -151,7 +176,10 @@ export function HampiGuideChat() {
                   <Sparkles className="h-4 w-4" />
                 </div>
                 <div className="bg-muted rounded-2xl rounded-tl-sm px-4 py-3">
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-xs text-muted-foreground">Thinking...</span>
+                  </div>
                 </div>
               </div>
             )}

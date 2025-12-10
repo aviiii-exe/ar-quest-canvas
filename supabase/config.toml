@@ -1,1 +1,4 @@
 project_id = "mukvvtxyotojlswapprl"
+
+[functions.hampi-guide]
+verify_jwt = false
