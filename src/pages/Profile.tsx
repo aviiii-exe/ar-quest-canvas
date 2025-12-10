@@ -6,15 +6,14 @@ import { useHeritageSites, usePassportStamps } from '@/hooks/useHeritageSites';
 import { useUserAchievements } from '@/hooks/useAchievements';
 import { FloatingNav } from '@/components/layout/FloatingNav';
 import { XPProgress } from '@/components/gamification/XPProgress';
-import { PassportStampCard } from '@/components/passport/PassportStampCard';
-import { AchievementBadge } from '@/components/gamification/AchievementBadge';
 import { ProfileHeader } from '@/components/profile/ProfileHeader';
 import { ProfileStats } from '@/components/profile/ProfileStats';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { PassportTab } from '@/components/profile/PassportTab';
+import { AchievementsTab } from '@/components/profile/AchievementsTab';
+import { HistoryTab } from '@/components/profile/HistoryTab';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MapPin, Trophy, Stamp, History } from 'lucide-react';
+import { Trophy, Stamp, History } from 'lucide-react';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -94,129 +93,26 @@ const Profile = () => {
           </TabsList>
 
           <TabsContent value="passport" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Stamp className="h-5 w-5" />
-                  Digital Passport
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {stampsLoading || sitesLoading ? (
-                  <div className="grid gap-4">
-                    {[1, 2, 3].map(i => <Skeleton key={i} className="h-24 w-full" />)}
-                  </div>
-                ) : stamps && stamps.length > 0 ? (
-                  <div className="grid gap-4">
-                    {stamps.map(stamp => {
-                      const site = sitesMap[stamp.site_id];
-                      if (!site) return null;
-                      return (
-                        <PassportStampCard 
-                          key={stamp.id} 
-                          site={site}
-                          stamp={stamp}
-                        />
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Stamp className="h-12 w-12 mx-auto mb-4 opacity-20" />
-                    <p>No stamps collected yet</p>
-                    <p className="text-sm">Visit heritage sites to collect stamps!</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <PassportTab 
+              stamps={stamps} 
+              sitesMap={sitesMap} 
+              isLoading={stampsLoading || sitesLoading} 
+            />
           </TabsContent>
 
           <TabsContent value="achievements" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5" />
-                  Achievements
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {achievementsLoading ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {[1, 2, 3].map(i => <Skeleton key={i} className="h-32 w-full" />)}
-                  </div>
-                ) : achievements && achievements.length > 0 ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {achievements.map(item => (
-                      <AchievementBadge 
-                        key={item.id} 
-                        achievement={item.achievement}
-                        earned={true}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Trophy className="h-12 w-12 mx-auto mb-4 opacity-20" />
-                    <p>No achievements earned yet</p>
-                    <p className="text-sm">Explore Hampi to unlock achievements!</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <AchievementsTab 
+              achievements={achievements} 
+              isLoading={achievementsLoading} 
+            />
           </TabsContent>
 
           <TabsContent value="history" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <History className="h-5 w-5" />
-                  Visit History
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {stampsLoading || sitesLoading ? (
-                  <div className="space-y-4">
-                    {[1, 2, 3].map(i => <Skeleton key={i} className="h-16 w-full" />)}
-                  </div>
-                ) : stamps && stamps.length > 0 ? (
-                  <div className="space-y-4">
-                    {stamps
-                      .sort((a, b) => new Date(b.collected_at).getTime() - new Date(a.collected_at).getTime())
-                      .map(stamp => {
-                        const site = sitesMap[stamp.site_id];
-                        if (!site) return null;
-                        return (
-                          <div key={stamp.id} className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
-                            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                              <MapPin className="h-5 w-5 text-primary" />
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-medium">{site.name}</p>
-                              <p className="text-sm text-muted-foreground">
-                                {new Date(stamp.collected_at).toLocaleDateString('en-US', {
-                                  weekday: 'short',
-                                  year: 'numeric',
-                                  month: 'short',
-                                  day: 'numeric'
-                                })}
-                              </p>
-                            </div>
-                            <Badge variant="secondary">
-                              +{site.xp_reward || 50} XP
-                            </Badge>
-                          </div>
-                        );
-                      })}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <History className="h-12 w-12 mx-auto mb-4 opacity-20" />
-                    <p>No visit history yet</p>
-                    <p className="text-sm">Start exploring to build your history!</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <HistoryTab 
+              stamps={stamps} 
+              sitesMap={sitesMap} 
+              isLoading={stampsLoading || sitesLoading} 
+            />
           </TabsContent>
         </Tabs>
       </div>
