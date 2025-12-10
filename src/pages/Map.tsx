@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { FloatingNav } from '@/components/layout/FloatingNav';
 import HeritageMap from '@/components/map/HeritageMap';
-import { useHeritageSites, usePassportStamps } from '@/hooks/useHeritageSites';
+import { useHeritageSites } from '@/hooks/useHeritageSites';
 import { useAuth } from '@/hooks/useAuth';
 import { useGeolocation } from '@/hooks/useGeolocation';
+import { useStampCollection } from '@/hooks/useStampCollection';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,104 +13,30 @@ import { Tables } from '@/integrations/supabase/types';
 import { MapPin, Clock, Star, X } from 'lucide-react';
 import QRScanner from '@/components/checkin/QRScanner';
 import ProximityCheckIn from '@/components/checkin/ProximityCheckIn';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import { PROXIMITY_RADIUS_METERS } from '@/constants/app';
+
 const Map = () => {
-  const {
-    user
-  } = useAuth();
-  const {
-    data: sites,
-    isLoading: sitesLoading
-  } = useHeritageSites();
-  const {
-    data: stamps,
-    refetch: refetchStamps
-  } = usePassportStamps();
-  const {
-    latitude,
-    longitude
-  } = useGeolocation({
-    watch: true
-  });
-  const {
-    toast
-  } = useToast();
+  const { user } = useAuth();
+  const { data: sites, isLoading: sitesLoading } = useHeritageSites();
+  const { latitude, longitude } = useGeolocation({ watch: true });
   const [selectedSite, setSelectedSite] = useState<Tables<'heritage_sites'> | null>(null);
-  const visitedSiteIds = stamps?.map(stamp => stamp.site_id) || [];
+
+  const { collectStamp, visitedSiteIds } = useStampCollection({
+    sites,
+    onSuccess: (site) => setSelectedSite(site)
+  });
+
   const handleSiteClick = (site: Tables<'heritage_sites'>) => {
     setSelectedSite(site);
   };
+
   const handleQRScan = async (siteId: string) => {
-    if (!user) {
-      toast({
-        title: "Sign in required",
-        description: "Please sign in to collect stamps",
-        variant: "destructive"
-      });
-      return;
-    }
-    const site = sites?.find(s => s.id === siteId);
-    if (!site) {
-      toast({
-        title: "Invalid QR Code",
-        description: "This QR code doesn't match any heritage site",
-        variant: "destructive"
-      });
-      return;
-    }
-    if (visitedSiteIds.includes(siteId)) {
-      toast({
-        title: "Already collected",
-        description: `You've already collected the stamp for ${site.name}`
-      });
-      return;
-    }
-    try {
-      const {
-        error
-      } = await supabase.from('passport_stamps').insert({
-        user_id: user.id,
-        site_id: siteId
-      });
-      if (error) throw error;
-      toast({
-        title: "Stamp Collected! 🎉",
-        description: `You've collected the stamp for ${site.name}`
-      });
-      refetchStamps();
-      setSelectedSite(site);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to collect stamp. Please try again.",
-        variant: "destructive"
-      });
-    }
+    await collectStamp(siteId);
   };
+
   const handleProximityCheckIn = async () => {
-    if (!selectedSite || !user) return;
-    try {
-      const {
-        error
-      } = await supabase.from('passport_stamps').insert({
-        user_id: user.id,
-        site_id: selectedSite.id
-      });
-      if (error) throw error;
-      toast({
-        title: "Stamp Collected! 🎉",
-        description: `You've collected the stamp for ${selectedSite.name}`
-      });
-      refetchStamps();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to collect stamp. Please try again.",
-        variant: "destructive"
-      });
-    }
+    if (!selectedSite) return;
+    await collectStamp(selectedSite);
   };
   const userLocation = latitude && longitude ? {
     lat: latitude,
