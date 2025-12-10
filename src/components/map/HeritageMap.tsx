@@ -12,6 +12,10 @@ import {
   MAPLIBRE_CSS_URL 
 } from '@/constants/app';
 
+// Map popup configuration
+const POPUP_OFFSET = 25;
+const POPUP_MIN_WIDTH = 200;
+
 interface HeritageMapProps {
   sites: Tables<'heritage_sites'>[];
   visitedSiteIds: string[];
@@ -111,9 +115,9 @@ const HeritageMap: React.FC<HeritageMapProps> = ({
         .addTo(map.current!);
 
       // Add popup
-      const popup = new maplibregl.Popup({ offset: 25, closeButton: false })
+      const popup = new maplibregl.Popup({ offset: POPUP_OFFSET, closeButton: false })
         .setHTML(`
-          <div class="p-3 min-w-[200px]">
+          <div class="p-3" style="min-width: ${POPUP_MIN_WIDTH}px">
             <h3 class="font-semibold text-sm mb-1">${site.name}</h3>
             <p class="text-xs text-gray-600 mb-2">${site.short_description || ''}</p>
             <div class="flex items-center gap-2">
