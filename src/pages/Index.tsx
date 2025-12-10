@@ -2,9 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { FloatingNav } from '@/components/layout/FloatingNav';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { HampiGuideChat } from "@/components/guide/HampiGuideChat";
 import { FeatureCard } from "@/components/landing/FeatureCard";
+import { QuickLinkCard } from "@/components/landing/QuickLinkCard";
 import { MapPin, Trophy, Compass, Sparkles, ArrowRight, Map, Camera, Stamp, MessageCircle } from "lucide-react";
 
 const Index = () => {
@@ -35,30 +35,19 @@ const Index = () => {
 
             {/* Quick Links */}
             <div className="grid grid-cols-2 gap-4">
-              <Card 
-                className="cursor-pointer hover:bg-muted/50 transition-colors"
+              <QuickLinkCard
+                icon={Map}
+                title="Explore Map"
+                description="Discover sites"
                 onClick={() => navigate('/map')}
-              >
-                <CardContent className="flex items-center gap-3 py-4">
-                  <Map className="h-8 w-8 text-primary" />
-                  <div>
-                    <p className="font-medium">Explore Map</p>
-                    <p className="text-sm text-muted-foreground">Discover sites</p>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card 
-                className="cursor-pointer hover:bg-muted/50 transition-colors"
+              />
+              <QuickLinkCard
+                icon={Stamp}
+                iconColorClass="text-emerald-500"
+                title="My Passport"
+                description="View stamps"
                 onClick={() => navigate('/profile')}
-              >
-                <CardContent className="flex items-center gap-3 py-4">
-                  <Stamp className="h-8 w-8 text-emerald-500" />
-                  <div>
-                    <p className="font-medium">My Passport</p>
-                    <p className="text-sm text-muted-foreground">View stamps</p>
-                  </div>
-                </CardContent>
-              </Card>
+              />
             </div>
           </div>
         </div>
