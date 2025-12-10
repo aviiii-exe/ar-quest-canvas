@@ -8,13 +8,13 @@ import { FloatingNav } from '@/components/layout/FloatingNav';
 import { XPProgress } from '@/components/gamification/XPProgress';
 import { PassportStampCard } from '@/components/passport/PassportStampCard';
 import { AchievementBadge } from '@/components/gamification/AchievementBadge';
+import { ProfileHeader } from '@/components/profile/ProfileHeader';
+import { ProfileStats } from '@/components/profile/ProfileStats';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LogOut, MapPin, Trophy, Stamp, History } from 'lucide-react';
+import { MapPin, Trophy, Stamp, History } from 'lucide-react';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -37,7 +37,6 @@ const Profile = () => {
 
   const isLoading = profileLoading || stampsLoading || achievementsLoading || sitesLoading;
 
-  // Create a map of site_id to site data
   const sitesMap = sites?.reduce((acc, site) => {
     acc[site.id] = site;
     return acc;
@@ -56,38 +55,15 @@ const Profile = () => {
       <FloatingNav />
       
       <div className="container pt-20 pb-8 space-y-6">
-        {/* Profile Header */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <Avatar className="h-20 w-20 border-4 border-primary">
-                <AvatarImage src={profile?.avatar_url || undefined} />
-                <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
-                  {(profile?.display_name || 'U').charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              
-              <div className="flex-1 text-center sm:text-left">
-                {isLoading ? (
-                  <Skeleton className="h-8 w-32 mx-auto sm:mx-0" />
-                ) : (
-                  <>
-                    <h1 className="text-2xl font-bold">{profile?.display_name || 'Explorer'}</h1>
-                    <p className="text-muted-foreground">@{profile?.username || 'explorer'}</p>
-                    {profile?.bio && <p className="text-sm mt-2">{profile.bio}</p>}
-                  </>
-                )}
-              </div>
+        <ProfileHeader
+          displayName={profile?.display_name}
+          username={profile?.username}
+          avatarUrl={profile?.avatar_url}
+          bio={profile?.bio}
+          isLoading={isLoading}
+          onSignOut={handleSignOut}
+        />
 
-              <Button variant="outline" onClick={handleSignOut} className="gap-2">
-                <LogOut className="h-4 w-4" />
-                Sign Out
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* XP Progress */}
         {!isLoading && (
           <XPProgress 
             currentXP={profile?.total_xp || 0} 
@@ -95,32 +71,12 @@ const Profile = () => {
           />
         )}
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4">
-          <Card>
-            <CardContent className="p-4 text-center">
-              <MapPin className="h-6 w-6 mx-auto text-primary mb-1" />
-              <div className="text-2xl font-bold">{stamps?.length || 0}</div>
-              <div className="text-xs text-muted-foreground">Sites Visited</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Trophy className="h-6 w-6 mx-auto text-amber-500 mb-1" />
-              <div className="text-2xl font-bold">{achievements?.length || 0}</div>
-              <div className="text-xs text-muted-foreground">Achievements</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Stamp className="h-6 w-6 mx-auto text-emerald-500 mb-1" />
-              <div className="text-2xl font-bold">{profile?.total_xp || 0}</div>
-              <div className="text-xs text-muted-foreground">Total XP</div>
-            </CardContent>
-          </Card>
-        </div>
+        <ProfileStats
+          sitesVisited={stamps?.length || 0}
+          achievementsCount={achievements?.length || 0}
+          totalXP={profile?.total_xp || 0}
+        />
 
-        {/* Tabs for Passport, Achievements, History */}
         <Tabs defaultValue="passport" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="passport" className="gap-2">
