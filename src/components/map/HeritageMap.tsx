@@ -4,9 +4,13 @@ import { Tables } from '@/integrations/supabase/types';
 import { MapPin, Navigation, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-
-// Import MapLibre CSS via CDN to ensure proper loading
-const MAPLIBRE_CSS = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css';
+import { 
+  HAMPI_CENTER, 
+  DEFAULT_MAP_ZOOM, 
+  LOCATE_USER_ZOOM, 
+  MAP_STYLES, 
+  MAPLIBRE_CSS_URL 
+} from '@/constants/app';
 
 interface HeritageMapProps {
   sites: Tables<'heritage_sites'>[];
@@ -30,21 +34,13 @@ const HeritageMap: React.FC<HeritageMapProps> = ({
   const [isLocating, setIsLocating] = useState(false);
   const [mapStyle, setMapStyle] = useState<'streets' | 'satellite'>('streets');
 
-  // Hampi coordinates (center of the heritage site)
-  const HAMPI_CENTER: [number, number] = [76.4610, 15.3350];
-
-  const MAP_STYLES = {
-    streets: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-    satellite: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
-  };
-
   // Load MapLibre CSS dynamically
   useEffect(() => {
-    const existingLink = document.querySelector(`link[href="${MAPLIBRE_CSS}"]`);
+    const existingLink = document.querySelector(`link[href="${MAPLIBRE_CSS_URL}"]`);
     if (!existingLink) {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = MAPLIBRE_CSS;
+      link.href = MAPLIBRE_CSS_URL;
       document.head.appendChild(link);
     }
   }, []);
@@ -56,7 +52,7 @@ const HeritageMap: React.FC<HeritageMapProps> = ({
       container: mapContainer.current,
       style: MAP_STYLES[mapStyle],
       center: HAMPI_CENTER,
-      zoom: 14,
+      zoom: DEFAULT_MAP_ZOOM,
       pitch: 0,
     });
 
@@ -169,7 +165,7 @@ const HeritageMap: React.FC<HeritageMapProps> = ({
           if (map.current) {
             map.current.flyTo({
               center: [longitude, latitude],
-              zoom: 16,
+              zoom: LOCATE_USER_ZOOM,
               duration: 2000,
               essential: true
             });
@@ -194,7 +190,7 @@ const HeritageMap: React.FC<HeritageMapProps> = ({
   const handleCenterOnHampi = () => {
     map.current?.flyTo({
       center: HAMPI_CENTER,
-      zoom: 14,
+      zoom: DEFAULT_MAP_ZOOM,
       duration: 1500
     });
   };

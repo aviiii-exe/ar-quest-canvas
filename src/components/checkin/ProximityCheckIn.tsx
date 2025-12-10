@@ -5,6 +5,7 @@ import { MapPin, Navigation, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { Tables } from '@/integrations/supabase/types';
 import { cn } from '@/lib/utils';
+import { PROXIMITY_RADIUS_METERS, PROXIMITY_DISPLAY_MULTIPLIER } from '@/constants/app';
 
 interface ProximityCheckInProps {
   site: Tables<'heritage_sites'>;
@@ -17,7 +18,7 @@ const ProximityCheckIn: React.FC<ProximityCheckInProps> = ({
   site,
   onCheckIn,
   isVisited,
-  checkInRadiusMeters = 200 // Default 200 meters
+  checkInRadiusMeters = PROXIMITY_RADIUS_METERS
 }) => {
   const { 
     latitude, 
@@ -107,7 +108,7 @@ const ProximityCheckIn: React.FC<ProximityCheckInProps> = ({
                     canCheckIn ? "bg-green-500" : "bg-primary"
                   )}
                   style={{ 
-                    width: `${Math.max(0, Math.min(100, (1 - distance / (checkInRadiusMeters * 5)) * 100))}%` 
+                    width: `${Math.max(0, Math.min(100, (1 - distance / (checkInRadiusMeters * PROXIMITY_DISPLAY_MULTIPLIER)) * 100))}%` 
                   }}
                 />
               </div>

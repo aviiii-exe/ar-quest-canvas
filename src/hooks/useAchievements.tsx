@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { XP_PER_LEVEL, DEFAULT_XP_REWARD } from '@/constants/app';
 
 export interface Achievement {
   id: string;
@@ -91,8 +92,8 @@ export function useEarnAchievement() {
           .single();
         
         if (profile) {
-          const newXp = (profile.total_xp || 0) + (achievement.xp_reward || 50);
-          const newLevel = Math.floor(newXp / 500) + 1;
+          const newXp = (profile.total_xp || 0) + (achievement.xp_reward || DEFAULT_XP_REWARD);
+          const newLevel = Math.floor(newXp / XP_PER_LEVEL) + 1;
           
           await supabase
             .from('profiles')

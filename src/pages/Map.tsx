@@ -14,8 +14,7 @@ import QRScanner from '@/components/checkin/QRScanner';
 import ProximityCheckIn from '@/components/checkin/ProximityCheckIn';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-
-const PROXIMITY_RADIUS_METERS = 200;
+import { PROXIMITY_RADIUS_METERS } from '@/constants/app';
 
 const Map = () => {
   const { user } = useAuth();
