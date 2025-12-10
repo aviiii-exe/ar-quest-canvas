@@ -2,9 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { FloatingNav } from '@/components/layout/FloatingNav';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { HampiGuideChat } from "@/components/guide/HampiGuideChat";
-import { MapPin, Trophy, Compass, Sparkles, ArrowRight, Map, Camera, Star, Stamp, MessageCircle } from "lucide-react";
+import { FeatureCard } from "@/components/landing/FeatureCard";
+import { MapPin, Trophy, Compass, Sparkles, ArrowRight, Map, Camera, Stamp, MessageCircle } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -107,64 +108,35 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Feature Cards - Horizontal Scroll on Mobile */}
+        {/* Feature Cards */}
         <div className="mt-16 max-w-5xl mx-auto">
           <div className="grid md:grid-cols-4 gap-4">
-            <Card className="bg-card/50 backdrop-blur border-border/50 group hover:border-primary/50 transition-colors">
-              <CardHeader className="pb-2">
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <Map className="h-6 w-6 text-primary" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardTitle className="text-base mb-1">Interactive Map</CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  Navigate heritage sites with GPS-powered exploration
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/50 backdrop-blur border-border/50 group hover:border-primary/50 transition-colors">
-              <CardHeader className="pb-2">
-                <div className="h-12 w-12 rounded-xl bg-emerald-500/10 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
-                  <Stamp className="h-6 w-6 text-emerald-500" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardTitle className="text-base mb-1">Digital Passport</CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  Collect unique stamps at each site you visit
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/50 backdrop-blur border-border/50 group hover:border-primary/50 transition-colors">
-              <CardHeader className="pb-2">
-                <div className="h-12 w-12 rounded-xl bg-amber-500/10 flex items-center justify-center group-hover:bg-amber-500/20 transition-colors">
-                  <Trophy className="h-6 w-6 text-amber-500" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardTitle className="text-base mb-1">Achievements</CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  Earn XP, unlock badges, and climb the leaderboard
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/50 backdrop-blur border-border/50 group hover:border-primary/50 transition-colors">
-              <CardHeader className="pb-2">
-                <div className="h-12 w-12 rounded-xl bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
-                  <Camera className="h-6 w-6 text-purple-500" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardTitle className="text-base mb-1">AR Experiences</CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  Scan QR codes to unlock hidden stories and 3D models
-                </p>
-              </CardContent>
-            </Card>
+            <FeatureCard
+              icon={Map}
+              title="Interactive Map"
+              description="Navigate heritage sites with GPS-powered exploration"
+            />
+            <FeatureCard
+              icon={Stamp}
+              title="Digital Passport"
+              description="Collect unique stamps at each site you visit"
+              iconColorClass="text-emerald-500"
+              iconBgClass="bg-emerald-500/10 group-hover:bg-emerald-500/20"
+            />
+            <FeatureCard
+              icon={Trophy}
+              title="Achievements"
+              description="Earn XP, unlock badges, and climb the leaderboard"
+              iconColorClass="text-amber-500"
+              iconBgClass="bg-amber-500/10 group-hover:bg-amber-500/20"
+            />
+            <FeatureCard
+              icon={Camera}
+              title="AR Experiences"
+              description="Scan QR codes to unlock hidden stories and 3D models"
+              iconColorClass="text-purple-500"
+              iconBgClass="bg-purple-500/10 group-hover:bg-purple-500/20"
+            />
           </div>
         </div>
 

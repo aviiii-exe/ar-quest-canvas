@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Camera, X, QrCode } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { QR_CODE_PREFIX } from '@/constants/app';
 
 interface QRScannerProps {
   onScan: (siteId: string) => void;
@@ -32,8 +32,8 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onError }) => {
         },
         (decodedText) => {
           // Parse QR code - expecting format: "hampi-heritage:site_id"
-          if (decodedText.startsWith('hampi-heritage:')) {
-            const siteId = decodedText.replace('hampi-heritage:', '');
+          if (decodedText.startsWith(QR_CODE_PREFIX)) {
+            const siteId = decodedText.replace(QR_CODE_PREFIX, '');
             onScan(siteId);
             stopScanning();
             setIsOpen(false);

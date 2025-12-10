@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Compass, Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { IconInput } from '@/components/ui/icon-input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
@@ -141,41 +140,27 @@ export default function Auth() {
               
               <TabsContent value="signin" className="mt-4">
                 <form onSubmit={handleSignIn} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signin-email">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <Input
-                        id="signin-email"
-                        type="email"
-                        placeholder="explorer@hampi.com"
-                        value={signInEmail}
-                        onChange={(e) => setSignInEmail(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                    {errors.signInEmail && (
-                      <p className="text-xs text-destructive">{errors.signInEmail}</p>
-                    )}
-                  </div>
+                  <IconInput
+                    id="signin-email"
+                    type="email"
+                    icon={Mail}
+                    label="Email"
+                    placeholder="explorer@hampi.com"
+                    value={signInEmail}
+                    onChange={(e) => setSignInEmail(e.target.value)}
+                    error={errors.signInEmail}
+                  />
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="signin-password">Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <Input
-                        id="signin-password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={signInPassword}
-                        onChange={(e) => setSignInPassword(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                    {errors.signInPassword && (
-                      <p className="text-xs text-destructive">{errors.signInPassword}</p>
-                    )}
-                  </div>
+                  <IconInput
+                    id="signin-password"
+                    type="password"
+                    icon={Lock}
+                    label="Password"
+                    placeholder="••••••••"
+                    value={signInPassword}
+                    onChange={(e) => setSignInPassword(e.target.value)}
+                    error={errors.signInPassword}
+                  />
 
                   <Button type="submit" className="w-full gap-2" disabled={isLoading}>
                     {isLoading ? 'Signing in...' : 'Continue Journey'}
@@ -186,59 +171,38 @@ export default function Auth() {
 
               <TabsContent value="signup" className="mt-4">
                 <form onSubmit={handleSignUp} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-username">Explorer Name</Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <Input
-                        id="signup-username"
-                        type="text"
-                        placeholder="HistoryHunter"
-                        value={signUpUsername}
-                        onChange={(e) => setSignUpUsername(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                    {errors.signUpUsername && (
-                      <p className="text-xs text-destructive">{errors.signUpUsername}</p>
-                    )}
-                  </div>
+                  <IconInput
+                    id="signup-username"
+                    type="text"
+                    icon={User}
+                    label="Explorer Name"
+                    placeholder="HistoryHunter"
+                    value={signUpUsername}
+                    onChange={(e) => setSignUpUsername(e.target.value)}
+                    error={errors.signUpUsername}
+                  />
 
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        placeholder="explorer@hampi.com"
-                        value={signUpEmail}
-                        onChange={(e) => setSignUpEmail(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                    {errors.signUpEmail && (
-                      <p className="text-xs text-destructive">{errors.signUpEmail}</p>
-                    )}
-                  </div>
+                  <IconInput
+                    id="signup-email"
+                    type="email"
+                    icon={Mail}
+                    label="Email"
+                    placeholder="explorer@hampi.com"
+                    value={signUpEmail}
+                    onChange={(e) => setSignUpEmail(e.target.value)}
+                    error={errors.signUpEmail}
+                  />
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <Input
-                        id="signup-password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={signUpPassword}
-                        onChange={(e) => setSignUpPassword(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                    {errors.signUpPassword && (
-                      <p className="text-xs text-destructive">{errors.signUpPassword}</p>
-                    )}
-                  </div>
+                  <IconInput
+                    id="signup-password"
+                    type="password"
+                    icon={Lock}
+                    label="Password"
+                    placeholder="••••••••"
+                    value={signUpPassword}
+                    onChange={(e) => setSignUpPassword(e.target.value)}
+                    error={errors.signUpPassword}
+                  />
 
                   <Button type="submit" className="w-full gap-2" disabled={isLoading}>
                     {isLoading ? 'Creating account...' : 'Start Exploring'}
